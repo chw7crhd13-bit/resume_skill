@@ -95,6 +95,70 @@ JD：
 
 如果 JD 是截图、PDF、DOCX 或网页内容，也可以直接上传，让 Codex 先提取岗位信息。
 
+## 下载与安装
+
+从 GitHub 下载：
+
+```bash
+git clone https://github.com/chw7crhd13-bit/resume_skill.git
+cd resume_skill
+```
+
+如果只是想把 skill 拷贝到某个 Codex/OpenClaw 工作区，可以只复制 skill 目录：
+
+```bash
+cp -R skills/lobster-resume /path/to/workspace/skills/
+```
+
+## OpenClaw 调用
+
+OpenClaw 的默认 workspace 通常在：
+
+```text
+~/.openclaw/workspace
+```
+
+把 skill 安装到 OpenClaw workspace：
+
+```bash
+git clone https://github.com/chw7crhd13-bit/resume_skill.git
+mkdir -p ~/.openclaw/workspace/skills
+cp -R resume_skill/skills/lobster-resume ~/.openclaw/workspace/skills/
+```
+
+检查 OpenClaw 是否识别到 skill：
+
+```bash
+openclaw skills list
+openclaw skills info lobster-resume
+openclaw skills check
+```
+
+本地调用一次 agent：
+
+```bash
+openclaw agent --local --message "使用 $lobster-resume，帮我保存我的基础简历信息：学校、GPA、实习经历、项目经历、获奖经历和技能。" --json
+```
+
+根据 JD 生成定制简历：
+
+```bash
+openclaw agent --local --message "使用 $lobster-resume，根据下面 JD 生成一版定制简历，并说明匹配关键词。JD：这里粘贴岗位描述。" --json
+```
+
+如果要让 OpenClaw 访问本地 PDF、截图或 DOCX，请在 message 里写清楚文件绝对路径，例如：
+
+```bash
+openclaw agent --local --message "使用 $lobster-resume，读取 /Users/you/Downloads/resume.pdf 和 /Users/you/Downloads/jd.png，生成一版定制简历 PDF。" --json
+```
+
+注意：`openclaw agent --local` 需要你的 shell 中已经配置好模型供应商 API key。可以先运行：
+
+```bash
+openclaw status
+openclaw models list
+```
+
 ## 保存 Profile
 
 默认保存位置是当前工作区：
@@ -183,4 +247,3 @@ python3 -m pip install reportlab pypdf
 - 自动评分和版面质量检测
 - DOCX 导出
 - Canva.com 外部模板联动
-
