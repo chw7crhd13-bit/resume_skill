@@ -27,6 +27,20 @@ python3 skills/lobster-resume/scripts/profile_store.py merge --input incoming_pr
 python3 skills/lobster-resume/scripts/profile_store.py missing
 ```
 
+## Dependencies
+
+PDF rendering requires `reportlab`. In Codex desktop, prefer the bundled workspace Python when available because it usually already includes the PDF stack. If `python3` raises `ModuleNotFoundError: reportlab`, install dependencies:
+
+```bash
+uv pip install reportlab pypdf
+```
+
+If `uv` is unavailable:
+
+```bash
+python3 -m pip install reportlab pypdf
+```
+
 ## Build The Profile
 
 When information is incomplete, ask only for the fields needed for the next useful resume. Prefer one compact checklist instead of many rounds.
@@ -61,6 +75,7 @@ When a JD arrives:
 - Keep one-page resumes dense and scannable; cut weak or unrelated bullets first.
 - Use company-appropriate tone and layout. For detailed style selection, read `references/company_style_playbook.md`.
 - For schema details and output contracts, read `references/resume_schema.md` when creating or patching saved profile data.
+- For PDF layout decisions, read `references/layout_quality.md` and use the canvas renderer when possible.
 
 ## Output
 
@@ -70,7 +85,30 @@ Default output is Markdown unless the user requests DOCX/PDF. Include:
 - Short tailoring note listing the JD keywords emphasized.
 - Missing facts that would improve the next version.
 
-For DOCX/PDF generation, use the relevant document or PDF tools/skills available in the environment, render-check the final file, and keep the visual style consistent with the selected company category.
+For PDF generation:
+
+1. Convert the tailored resume into the JSON contract expected by `scripts/render_resume_pdf.py`.
+2. Generate a PDF with the canvas renderer:
+
+```bash
+python3 skills/lobster-resume/scripts/render_resume_pdf.py --input tailored_resume.json --output output/pdf/tailored_resume.pdf
+```
+
+3. Render the PDF to an image using `pdftoppm`, `sips`, or an available PDF renderer.
+4. Inspect the rendered page. If typography, spacing, overflow, hierarchy, or density is weak, revise the JSON content or renderer settings and regenerate.
+5. Repeat until the PDF is visually credible for the target company style.
+
+For DOCX generation, use the relevant document tooling, render-check the final file, and keep the visual style consistent with the selected company category.
+
+## Iterative Debugging
+
+Treat every resume as a layout + content product, not a one-shot text artifact.
+
+- First pass: generate the tailored content and a PDF.
+- Visual pass: inspect rendered pages for density, hierarchy, alignment, whitespace, clipping, and readability.
+- Content pass: check that the strongest JD matches are visible in the first third of the resume.
+- Adjustment pass: tune section order, bullet length, font scale, line height, sidebar width, or page count.
+- Final pass: verify text extraction still works and no important claims were invented.
 
 ## Quality Bar
 
@@ -78,4 +116,5 @@ For DOCX/PDF generation, use the relevant document or PDF tools/skills available
 - No private data beyond what the user supplied.
 - Keep Chinese resumes natural and concise; keep English resumes ATS-friendly and accomplishment-oriented.
 - If the JD and profile conflict, state the mismatch and choose the truthful version.
-
+- PDF output must be visually checked after rendering; do not deliver a PDF that only "technically generated" but looks unpolished.
+- Font size and spacing must adapt to content length. Prefer reducing weak content before making the page unreadably small.
