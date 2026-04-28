@@ -10,7 +10,7 @@ description: Use this skill when the user wants to build, store, update, brainst
 1. 建档：收集并保存用户的基础履历信息。
 2. 定制：用户给出任意 JD（文字、截图、PDF、DOCX、网页内容等）后，先判断模板和匹配方向，再询问用户是否进入头脑风暴，最后默认生成可编辑 Word 简历与面试建议；用户需要时再导出 PDF。
 
-This skill includes a bundled resume template library under `assets/templates/` with many Word templates and preview images across industries. Before comparing the candidate profile against the JD, mention that the skill has multiple templates and will choose one based on the JD, company style, and candidate background.
+This skill supports an optional Word template library cached under `assets/templates/`. The lightweight install does not include the full template files; download only the needed category with `scripts/download_templates.py` when a real Word template is required. Before comparing the candidate profile against the JD, mention that multiple templates are available and can be downloaded on demand based on the JD, company style, and candidate background.
 
 ## Storage
 
@@ -28,6 +28,22 @@ python3 skills/lobster-resume/scripts/profile_store.py show
 python3 skills/lobster-resume/scripts/profile_store.py merge --input incoming_profile.json
 python3 skills/lobster-resume/scripts/profile_store.py missing
 ```
+
+## Optional Templates
+
+The full template library is optional so users do not need to download every Word template during installation.
+
+Use the downloader only after the JD/template category is known:
+
+```bash
+python3 skills/lobster-resume/scripts/download_templates.py --list
+python3 skills/lobster-resume/scripts/download_templates.py --category 通用
+python3 skills/lobster-resume/scripts/download_templates.py --all
+```
+
+- Prefer `--category <name>` over `--all`.
+- If templates are unavailable or network download fails, continue with `scripts/render_resume_docx.py`.
+- Downloaded templates are local cache files and should not be committed.
 
 ## Dependencies
 
@@ -65,7 +81,7 @@ When a JD arrives:
 
 1. Extract the JD text. For screenshots/images, OCR visually; for PDFs/DOCX, use the available document/PDF tooling if needed.
 2. Identify company, role, industry, seniority, location, required skills, preferred skills, responsibilities, culture signals, and application language.
-3. Choose a template family from the bundled catalog. Read `references/template_catalog.md` when selecting templates.
+3. Choose a template family from the template catalog. Read `references/template_catalog.md` when selecting templates. Download that category on demand only if a concrete Word template is needed.
 4. Read the saved profile. If none exists, collect a minimal profile first.
 5. Before generating, ask whether the user wants a JD-driven brainstorming round. Explain that this can uncover hidden experiences, adjacent skills, coursework, tools, or small projects that make the resume more targeted.
 6. If the user agrees, follow `references/brainstorming_guide.md`: ask focused questions, collect answers, merge useful evidence into the profile, and then generate.
@@ -80,7 +96,7 @@ When a JD arrives:
 - Mirror important JD keywords naturally for ATS, but keep claims truthful.
 - Keep one-page resumes dense and scannable; cut weak or unrelated bullets first.
 - Use company-appropriate tone and layout. For detailed style selection, read `references/company_style_playbook.md`.
-- Use the bundled Word template library when the user wants a DOCX/Word-style resume. For template selection, read `references/template_catalog.md`.
+- Use the optional Word template library when the user wants a specific template-backed DOCX. Download only the selected category with `scripts/download_templates.py`. For template selection, read `references/template_catalog.md`.
 - For JD-driven experience discovery and interview advice, read `references/brainstorming_guide.md`.
 - For schema details and output contracts, read `references/resume_schema.md` when creating or patching saved profile data.
 - For PDF layout decisions, read `references/layout_quality.md` and use the canvas renderer when possible.
@@ -105,7 +121,7 @@ python3 skills/lobster-resume/scripts/render_resume_docx.py --input tailored_res
 ```
 
 3. When possible, render-check the DOCX using the available document tooling before delivery.
-4. If using a bundled Word template, copy the selected template from `assets/templates/` into the output directory and replace placeholder content while preserving styles.
+4. If using an optional Word template, first ensure the selected category exists under `assets/templates/`; if not, run `scripts/download_templates.py --category <category>`. Then copy the selected template into the output directory and replace placeholder content while preserving styles.
 
 For PDF generation, use the local canvas renderer. Do not use Markdown-to-PDF as the final output path unless the user only wants a rough draft.
 

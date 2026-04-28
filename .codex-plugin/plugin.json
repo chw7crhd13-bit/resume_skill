@@ -1,7 +1,7 @@
 {
   "name": "lobster-resume",
   "version": "0.1.0",
-  "description": "A Codex plugin for collecting candidate background, selecting bundled resume templates, brainstorming JD-fit evidence, and generating editable Word resumes from job descriptions.",
+  "description": "A lightweight Codex plugin for collecting candidate background, selecting optional resume templates, brainstorming JD-fit evidence, and generating editable Word resumes from job descriptions.",
   "author": {
     "name": "Longxia",
     "email": "noreply@example.com",
@@ -15,7 +15,7 @@
   "interface": {
     "displayName": "Lobster Resume",
     "shortDescription": "Template-backed tailored resumes from JDs",
-    "longDescription": "Collects a candidate's education, GPA, internships, projects, awards, skills, and preferences, chooses from bundled Word resume templates and previews, offers JD-driven brainstorming to uncover relevant evidence, then generates a company- and role-matched editable Word resume by default plus interview advice from any job description text, screenshot, PDF, DOCX, or document upload.",
+    "longDescription": "Collects a candidate's education, GPA, internships, projects, awards, skills, and preferences, chooses from optional on-demand Word resume templates, offers JD-driven brainstorming to uncover relevant evidence, then generates a company- and role-matched editable Word resume by default plus interview advice from any job description text, screenshot, PDF, DOCX, or document upload.",
     "developerName": "Longxia",
     "category": "Productivity",
     "capabilities": ["Write", "Interactive"],

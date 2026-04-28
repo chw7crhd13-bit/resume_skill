@@ -6,3 +6,5 @@ output/
 outputs/
 tmp/
 模板/
+skills/lobster-resume/assets/templates/*
+!skills/lobster-resume/assets/templates/README.md

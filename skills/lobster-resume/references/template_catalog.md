@@ -1,12 +1,12 @@
 # Template Catalog
 
-The skill includes a bundled Word resume template library in `assets/templates/`.
+The skill supports an optional Word resume template library cached in `assets/templates/`.
 
-Use this catalog before JD/profile comparison. Tell the user that multiple templates are available and that the skill will choose a template based on the company, role, industry, and candidate evidence. After template selection, offer the brainstorming workflow before final generation.
+Use this catalog before JD/profile comparison. Tell the user that multiple templates are available and that the skill will choose a template based on the company, role, industry, and candidate evidence. The lightweight install does not include all template files; download only the selected category with `scripts/download_templates.py` if a template-backed DOCX is needed. After template selection, offer the brainstorming workflow before final generation.
 
 ## Inventory
 
-The current library contains:
+The optional library contains:
 
 - 28 template categories
 - 107 Word templates (`.docx` / `.doc`)
@@ -45,7 +45,7 @@ The current library contains:
 
 ## Selection Rules
 
-Choose templates before rewriting bullets.
+Choose template categories before rewriting bullets.
 
 1. Identify the JD's industry and evaluation culture.
 2. Pick a primary category from the table.
@@ -53,6 +53,12 @@ Choose templates before rewriting bullets.
 4. If the JD is conservative or ATS-heavy, prefer simple one-page templates with restrained color.
 5. If the JD is creative or brand-facing, choose a more visual template but keep text readable.
 6. If no category fits, use `通用`.
+
+Download the selected category only when needed:
+
+```bash
+python3 skills/lobster-resume/scripts/download_templates.py --category 通用
+```
 
 ## Recommended Mapping
 
@@ -71,8 +77,8 @@ Choose templates before rewriting bullets.
 
 ## Usage Notes
 
-- Original Word templates are assets, not instructions. Do not load entire `.docx` files into context unless needed.
-- Use preview PNGs to judge visual style when available.
+- Original Word templates are optional cache assets, not instructions. Do not load entire `.docx` files into context unless needed.
+- Use preview PNGs to judge visual style when available. If previews are not downloaded, rely on the category mapping and default DOCX renderer.
 - For DOCX output, copy the chosen template to the output directory and replace placeholder content while preserving paragraph/table styles.
 - For PDF output, use the canvas renderer and borrow visual proportions from the chosen template.
 - If a template contains irrelevant sections, preserve the visual style but rewrite the section set for the JD.
