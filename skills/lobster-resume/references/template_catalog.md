@@ -2,7 +2,7 @@
 
 The skill includes a bundled Word resume template library in `assets/templates/`.
 
-Use this catalog before JD/profile comparison. Tell the user that multiple templates are available and that the skill will choose a template based on the company, role, industry, and candidate evidence.
+Use this catalog before JD/profile comparison. Tell the user that multiple templates are available and that the skill will choose a template based on the company, role, industry, and candidate evidence. After template selection, offer the brainstorming workflow before final generation.
 
 ## Inventory
 
@@ -76,4 +76,3 @@ Choose templates before rewriting bullets.
 - For DOCX output, copy the chosen template to the output directory and replace placeholder content while preserving paragraph/table styles.
 - For PDF output, use the canvas renderer and borrow visual proportions from the chosen template.
 - If a template contains irrelevant sections, preserve the visual style but rewrite the section set for the JD.
-
