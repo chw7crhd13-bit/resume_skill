@@ -1,6 +1,6 @@
 ---
 name: lobster-resume
-description: Use this skill when the user wants to build, store, update, or tailor a resume/CV from candidate background information and a job description, including JD text, screenshots, PDFs, DOCX files, webpages, or copied postings. It collects schools, GPA, internships, projects, awards, skills, languages, and preferences, saves the profile, then generates a company- and role-matched resume style.
+description: Use this skill when the user wants to build, store, update, brainstorm, or tailor a resume/CV from candidate background information and a job description, including JD text, screenshots, PDFs, DOCX files, webpages, or copied postings. It collects schools, GPA, internships, projects, awards, skills, languages, and preferences, saves the profile, offers JD-driven brainstorming to uncover relevant experiences and skills, then generates a company- and role-matched resume plus interview advice.
 ---
 
 # Lobster Resume
@@ -8,7 +8,7 @@ description: Use this skill when the user wants to build, store, update, or tail
 龙虾简历用于两类任务：
 
 1. 建档：收集并保存用户的基础履历信息。
-2. 定制：用户给出任意 JD（文字、截图、PDF、DOCX、网页内容等）后，马上生成一份匹配岗位和公司风格的简历。
+2. 定制：用户给出任意 JD（文字、截图、PDF、DOCX、网页内容等）后，先判断模板和匹配方向，再询问用户是否进入头脑风暴，最后生成匹配岗位和公司风格的简历与面试建议。
 
 This skill includes a bundled resume template library under `assets/templates/` with many Word templates and preview images across industries. Before comparing the candidate profile against the JD, mention that the skill has multiple templates and will choose one based on the JD, company style, and candidate background.
 
@@ -67,8 +67,11 @@ When a JD arrives:
 2. Identify company, role, industry, seniority, location, required skills, preferred skills, responsibilities, culture signals, and application language.
 3. Choose a template family from the bundled catalog. Read `references/template_catalog.md` when selecting templates.
 4. Read the saved profile. If none exists, collect a minimal profile first.
-5. Map JD requirements to candidate evidence. Prefer direct matches, then adjacent transferable evidence.
-6. Generate the resume immediately unless a missing field would materially change the result.
+5. Before generating, ask whether the user wants a JD-driven brainstorming round. Explain that this can uncover hidden experiences, adjacent skills, coursework, tools, or small projects that make the resume more targeted.
+6. If the user agrees, follow `references/brainstorming_guide.md`: ask focused questions, collect answers, merge useful evidence into the profile, and then generate.
+7. If the user declines or asks for speed, generate the best draft from existing evidence and list missing evidence that would improve the resume.
+8. Map JD requirements to candidate evidence. Prefer direct matches, then adjacent transferable evidence.
+9. Generate the resume unless a missing field would materially change the result.
 
 ## Tailoring Rules
 
@@ -78,6 +81,7 @@ When a JD arrives:
 - Keep one-page resumes dense and scannable; cut weak or unrelated bullets first.
 - Use company-appropriate tone and layout. For detailed style selection, read `references/company_style_playbook.md`.
 - Use the bundled Word template library when the user wants a DOCX/Word-style resume. For template selection, read `references/template_catalog.md`.
+- For JD-driven experience discovery and interview advice, read `references/brainstorming_guide.md`.
 - For schema details and output contracts, read `references/resume_schema.md` when creating or patching saved profile data.
 - For PDF layout decisions, read `references/layout_quality.md` and use the canvas renderer when possible.
 - For stronger visual composition, read `references/poster_layout_patterns.md` and borrow poster-generator ideas such as layers, grids, visual anchors, and template variables without sacrificing ATS readability.
@@ -89,6 +93,7 @@ Default output is Markdown unless the user requests DOCX/PDF. Include:
 - Targeted resume.
 - Short tailoring note listing the JD keywords emphasized.
 - Missing facts that would improve the next version.
+- Interview advice based on the final resume/JD fit: likely questions, weak spots to prepare, and suggested stories.
 
 For PDF generation, default to the local canvas renderer. Do not use Markdown-to-PDF as the final output path unless the user only wants a rough draft.
 
@@ -122,6 +127,7 @@ Treat every resume as a layout + content product, not a one-shot text artifact.
 ## Quality Bar
 
 - No fabricated schools, employers, dates, awards, tools, certifications, or quantified impact.
+- Brainstorming may transform partial familiarity into honest resume language, but never claim mastery, production use, certificates, awards, or metrics the user did not provide.
 - No private data beyond what the user supplied.
 - Keep Chinese resumes natural and concise; keep English resumes ATS-friendly and accomplishment-oriented.
 - If the JD and profile conflict, state the mismatch and choose the truthful version.
