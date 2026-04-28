@@ -1,6 +1,6 @@
 ---
 name: lobster-resume
-description: Use this skill when the user wants to build, store, update, brainstorm, or tailor a resume/CV from candidate background information and a job description, including JD text, screenshots, PDFs, DOCX files, webpages, or copied postings. It collects schools, GPA, internships, projects, awards, skills, languages, and preferences, saves the profile, offers JD-driven brainstorming to uncover relevant experiences and skills, then generates a company- and role-matched resume plus interview advice.
+description: Use this skill when the user wants to build, store, update, brainstorm, or tailor a resume/CV from candidate background information and a job description, including JD text, screenshots, PDFs, DOCX files, webpages, or copied postings. It collects schools, GPA, internships, projects, awards, skills, languages, and preferences, saves the profile, offers JD-driven brainstorming to uncover relevant experiences and skills, then generates a company- and role-matched editable Word resume by default plus interview advice.
 ---
 
 # Lobster Resume
@@ -8,7 +8,7 @@ description: Use this skill when the user wants to build, store, update, brainst
 龙虾简历用于两类任务：
 
 1. 建档：收集并保存用户的基础履历信息。
-2. 定制：用户给出任意 JD（文字、截图、PDF、DOCX、网页内容等）后，先判断模板和匹配方向，再询问用户是否进入头脑风暴，最后生成匹配岗位和公司风格的简历与面试建议。
+2. 定制：用户给出任意 JD（文字、截图、PDF、DOCX、网页内容等）后，先判断模板和匹配方向，再询问用户是否进入头脑风暴，最后默认生成可编辑 Word 简历与面试建议；用户需要时再导出 PDF。
 
 This skill includes a bundled resume template library under `assets/templates/` with many Word templates and preview images across industries. Before comparing the candidate profile against the JD, mention that the skill has multiple templates and will choose one based on the JD, company style, and candidate background.
 
@@ -31,16 +31,16 @@ python3 skills/lobster-resume/scripts/profile_store.py missing
 
 ## Dependencies
 
-PDF rendering requires `reportlab`. In Codex desktop, prefer the bundled workspace Python when available because it usually already includes the PDF stack. If `python3` raises `ModuleNotFoundError: reportlab`, install dependencies:
+DOCX rendering requires `python-docx`. PDF rendering requires `reportlab`. In Codex desktop, prefer the bundled workspace Python when available because it usually already includes the document/PDF stack. If `python3` raises `ModuleNotFoundError`, install dependencies:
 
 ```bash
-uv pip install reportlab pypdf
+uv pip install python-docx reportlab pypdf
 ```
 
 If `uv` is unavailable:
 
 ```bash
-python3 -m pip install reportlab pypdf
+python3 -m pip install python-docx reportlab pypdf
 ```
 
 ## Build The Profile
@@ -88,14 +88,26 @@ When a JD arrives:
 
 ## Output
 
-Default output is Markdown unless the user requests DOCX/PDF. Include:
+Default output is an editable Word document (`.docx`) plus a short Markdown note. Use PDF only when the user asks for a final/export version or a visual check. Include:
 
 - Targeted resume.
 - Short tailoring note listing the JD keywords emphasized.
 - Missing facts that would improve the next version.
 - Interview advice based on the final resume/JD fit: likely questions, weak spots to prepare, and suggested stories.
 
-For PDF generation, default to the local canvas renderer. Do not use Markdown-to-PDF as the final output path unless the user only wants a rough draft.
+For DOCX generation, default to the local Word renderer unless a bundled template is clearly better.
+
+1. Convert the tailored resume into the JSON contract expected by `scripts/render_resume_docx.py`.
+2. Generate an editable DOCX:
+
+```bash
+python3 skills/lobster-resume/scripts/render_resume_docx.py --input tailored_resume.json --output output/docx/tailored_resume.docx
+```
+
+3. When possible, render-check the DOCX using the available document tooling before delivery.
+4. If using a bundled Word template, copy the selected template from `assets/templates/` into the output directory and replace placeholder content while preserving styles.
+
+For PDF generation, use the local canvas renderer. Do not use Markdown-to-PDF as the final output path unless the user only wants a rough draft.
 
 1. Convert the tailored resume into the JSON contract expected by `scripts/render_resume_pdf.py`.
 2. Generate a PDF with the canvas renderer:
@@ -108,17 +120,15 @@ python3 skills/lobster-resume/scripts/render_resume_pdf.py --input tailored_resu
 4. Inspect the rendered page. If typography, spacing, overflow, hierarchy, or density is weak, revise the JSON content or renderer settings and regenerate.
 5. Repeat until the PDF is visually credible for the target company style.
 
-For DOCX generation, use the relevant document tooling, render-check the final file, and keep the visual style consistent with the selected company category.
+For DOCX generation, use the relevant document tooling, render-check the final file when possible, and keep the visual style consistent with the selected company category.
 
-For template-based DOCX output, copy the selected bundled template from `assets/templates/` into the output directory, replace placeholder content while preserving styles as much as possible, then render/inspect the final document.
-
-If the user explicitly asks for Canva.com output, treat it as an external design-platform workflow: use Canva only when authentication, a template/design ID, and export permissions are available. Otherwise keep the default local canvas renderer because it is deterministic, ATS-readable, and does not depend on external accounts.
+If the user explicitly asks for Canva.com output, treat it as an external design-platform workflow: use Canva only when authentication, a template/design ID, and export permissions are available. Otherwise keep the default editable DOCX workflow, with the local canvas renderer available for PDF export because it is deterministic, ATS-readable, and does not depend on external accounts.
 
 ## Iterative Debugging
 
 Treat every resume as a layout + content product, not a one-shot text artifact.
 
-- First pass: generate the tailored content and a PDF.
+- First pass: generate the tailored content and an editable DOCX.
 - Visual pass: inspect rendered pages for density, hierarchy, alignment, whitespace, clipping, and readability.
 - Content pass: check that the strongest JD matches are visible in the first third of the resume.
 - Adjustment pass: tune section order, bullet length, font scale, line height, sidebar width, or page count.
@@ -131,5 +141,5 @@ Treat every resume as a layout + content product, not a one-shot text artifact.
 - No private data beyond what the user supplied.
 - Keep Chinese resumes natural and concise; keep English resumes ATS-friendly and accomplishment-oriented.
 - If the JD and profile conflict, state the mismatch and choose the truthful version.
-- PDF output must be visually checked after rendering; do not deliver a PDF that only "technically generated" but looks unpolished.
+- DOCX output is the default deliverable so the user can fine-tune wording and layout. PDF output must be visually checked after rendering; do not deliver a PDF that only "technically generated" but looks unpolished.
 - Font size and spacing must adapt to content length. Prefer reducing weak content before making the page unreadably small.

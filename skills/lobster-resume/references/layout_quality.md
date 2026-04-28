@@ -6,9 +6,13 @@ Use this reference when generating DOCX/PDF resumes or when a user critiques res
 
 Resume generation is iterative. A good resume is not only tailored text; it is readable typography, clear hierarchy, and controlled density.
 
+## Output Preference
+
+Default to an editable DOCX so the user can fine-tune wording and spacing in Word/WPS. Use `scripts/render_resume_docx.py` for a deterministic Word draft, or copy a selected bundled Word template when it clearly matches the JD style.
+
 ## PDF Renderer Preference
 
-Use `scripts/render_resume_pdf.py` as the default final PDF path because it uses ReportLab canvas-level control:
+Use `scripts/render_resume_pdf.py` when the user asks for a final/export PDF or when visual QA requires a PDF because it uses ReportLab canvas-level control:
 
 - trial layout before final rendering
 - dynamic font scale and line height
@@ -31,11 +35,11 @@ Use Canva only when all are true:
 - A target Canva design/template is available or the user accepts creating one.
 - The final export can still be reviewed for ATS readability and layout quality.
 
-If those conditions are not met, use the local canvas renderer and iterate visually.
+If those conditions are not met, use the default editable DOCX workflow and export PDF locally when needed.
 
 ## Visual QA Checklist
 
-Render the PDF to PNG and inspect it before delivery:
+Render DOCX/PDF pages to PNG and inspect them before delivery when tooling is available:
 
 - Page is not blank, transparent, black-background, clipped, or corrupted.
 - Name and target role are visible in the first viewport.

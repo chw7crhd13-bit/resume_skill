@@ -1,6 +1,6 @@
 # Lobster Resume Skill
 
-`lobster-resume` 是一个用于“保存候选人基础履历 + 根据 JD 头脑风暴 + 自动生成定制简历”的 Skill。
+`lobster-resume` 是一个用于“保存候选人基础履历 + 根据 JD 头脑风暴 + 默认生成可编辑 Word 简历”的 Codex Skill。
 
 它内置多套 Word 简历模板和预览图，覆盖金融、投行、财务会计、软件、咨询、运营、销售、法律、设计、行政、人力资源、外贸、通信电子、通用简洁版等方向。生成简历前，skill 会先根据 JD 的公司类型、岗位方向和候选人背景选择合适模板，再进行内容匹配、改写和排版。
 
@@ -11,7 +11,7 @@
 - 用户上传 JD 截图、文字、PDF、DOCX 或网页内容后，自动提取岗位要求。
 - 在生成前询问是否开启头脑风暴，帮助用户想起课程、实习、项目、工具、比赛、报告等可迁移经历。
 - 根据公司/岗位风格选择内置模板、简历表达方式和排版风格。
-- 输出 Markdown 简历、可投递 PDF，并给出后续面试准备建议。
+- 默认输出可编辑 Word 简历，方便用户手动微调；需要时再导出可投递 PDF，并给出后续面试准备建议。
 
 ## 目录结构
 
@@ -23,6 +23,7 @@
 │   ├── agents/openai.yaml
 │   ├── scripts/
 │   │   ├── profile_store.py
+│   │   ├── render_resume_docx.py
 │   │   └── render_resume_pdf.py
 │   ├── assets/templates/
 │   │   ├── 通用/
@@ -89,7 +90,11 @@
    - 营销/广告/公关
    - 通用简洁版
 
-6. **PDF 排版与迭代**
+6. **Word 优先输出**
+
+   默认生成 `.docx`，方便用户在 Word/WPS 里继续改字、调间距、换模板或补充经历。PDF 作为最终投递版或视觉检查版按需导出。
+
+7. **PDF 排版与迭代**
 
    PDF 默认使用本地 canvas 渲染器 `render_resume_pdf.py`，支持：
 
@@ -120,7 +125,7 @@ GPA：
 之后当你有 JD 时：
 
 ```text
-使用 $lobster-resume，根据这份 JD 先帮我判断模板方向，再问我要不要头脑风暴，最后生成一版定制简历和面试建议。
+使用 $lobster-resume，根据这份 JD 先帮我判断模板方向，再问我要不要头脑风暴，最后生成一版可编辑 Word 简历和面试建议。
 
 JD：
 ……
@@ -214,13 +219,13 @@ openclaw agent --local --message "使用 $lobster-resume，帮我保存我的基
 根据 JD 生成定制简历：
 
 ```bash
-openclaw agent --local --message "使用 $lobster-resume，根据下面 JD 先判断模板方向，再问我要不要头脑风暴，最后生成一版定制简历和面试建议。JD：这里粘贴岗位描述。" --json
+openclaw agent --local --message "使用 $lobster-resume，根据下面 JD 先判断模板方向，再问我要不要头脑风暴，最后生成一版可编辑 Word 简历和面试建议。JD：这里粘贴岗位描述。" --json
 ```
 
 如果要让 OpenClaw 访问本地 PDF、截图或 DOCX，请在 message 里写清楚文件绝对路径，例如：
 
 ```bash
-openclaw agent --local --message "使用 $lobster-resume，读取 /Users/you/Downloads/resume.pdf 和 /Users/you/Downloads/jd.png，生成一版定制简历 PDF。" --json
+openclaw agent --local --message "使用 $lobster-resume，读取 /Users/you/Downloads/resume.pdf 和 /Users/you/Downloads/jd.png，生成一版可编辑 Word 简历。" --json
 ```
 
 注意：`openclaw agent --local` 需要你的 shell 中已经配置好模型供应商 API key。可以先运行：
@@ -256,11 +261,21 @@ python3 skills/lobster-resume/scripts/profile_store.py missing
 python3 skills/lobster-resume/scripts/profile_store.py merge --input incoming_profile.json
 ```
 
+## 生成 Word
+
+先准备一份定制简历 JSON，格式参考 `skills/lobster-resume/scripts/render_resume_docx.py` 文件头部说明。
+
+生成 DOCX：
+
+```bash
+python3 skills/lobster-resume/scripts/render_resume_docx.py \
+  --input tailored_resume.json \
+  --output output/docx/tailored_resume.docx
+```
+
 ## 生成 PDF
 
-先准备一份定制简历 JSON，格式参考 `skills/lobster-resume/scripts/render_resume_pdf.py` 文件头部说明。
-
-生成 PDF：
+如果需要最终投递版或视觉检查版，可以再生成 PDF：
 
 ```bash
 python3 skills/lobster-resume/scripts/render_resume_pdf.py \
@@ -279,26 +294,26 @@ python3 skills/lobster-resume/scripts/render_resume_pdf.py \
 
 ## 依赖
 
-PDF 渲染需要：
+DOCX/PDF 渲染需要：
 
 ```bash
-uv pip install reportlab pypdf
+uv pip install python-docx reportlab pypdf
 ```
 
 如果没有 `uv`：
 
 ```bash
-python3 -m pip install reportlab pypdf
+python3 -m pip install python-docx reportlab pypdf
 ```
 
-在 Codex Desktop 环境中，也可以使用 bundled workspace Python，它通常已经包含 PDF 相关依赖。
+在 Codex Desktop 环境中，也可以使用 bundled workspace Python，它通常已经包含 DOCX/PDF 相关依赖。
 
 ## 设计原则
 
 - 不编造学历、经历、日期、奖项、技能或量化结果。
 - 根据 JD 强化真实匹配点，而不是硬塞关键词。
 - 简历不只是文字生成，还需要排版调试。
-- PDF 必须渲染检查，避免乱码、黑底、溢出、拥挤、层级混乱。
+- 默认交付 Word，方便用户自己微调；PDF 必须渲染检查，避免乱码、黑底、溢出、拥挤、层级混乱。
 - 默认本地 canvas 渲染；Canva.com 只作为用户明确要求时的外部平台流程。
 
 ## 当前状态
@@ -308,7 +323,8 @@ python3 -m pip install reportlab pypdf
 - 保存用户履历资料
 - 解析 JD 并生成定制简历
 - 按公司风格选择表达方式
-- 使用 canvas 渲染 PDF
+- 默认生成可编辑 Word 简历
+- 按需使用 canvas 渲染 PDF
 - 参考海报/设计生成项目优化排版
 
 后续可以继续扩展：
@@ -316,5 +332,5 @@ python3 -m pip install reportlab pypdf
 - 多模板注册表
 - 更丰富的公司风格分类
 - 自动评分和版面质量检测
-- DOCX 导出
+- 更强的 Word 模板占位符替换
 - Canva.com 外部模板联动

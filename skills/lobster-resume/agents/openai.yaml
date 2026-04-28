@@ -3,4 +3,4 @@ interface:
   short_description: "Template-backed tailored resumes from JDs"
   icon_large: "./assets/lobster-resume.svg"
   brand_color: "#C2410C"
-  default_prompt: "Use $lobster-resume to choose a template, brainstorm JD-fit evidence, and tailor my resume."
+  default_prompt: "Use $lobster-resume to choose a template, brainstorm JD-fit evidence, and create an editable Word resume."
