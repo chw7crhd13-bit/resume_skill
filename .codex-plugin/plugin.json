@@ -1,7 +1,7 @@
 {
   "name": "lobster-resume",
   "version": "0.1.0",
-  "description": "A Codex plugin for collecting candidate background and generating tailored resumes from job descriptions.",
+  "description": "A Codex plugin for collecting candidate background, selecting bundled resume templates, and generating tailored resumes from job descriptions.",
   "author": {
     "name": "Longxia",
     "email": "noreply@example.com",
@@ -14,8 +14,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Lobster Resume",
-    "shortDescription": "Tailored resumes from saved profile and JDs",
-    "longDescription": "Collects a candidate's education, GPA, internships, projects, awards, skills, and preferences, then generates a company- and role-matched resume from any job description text, screenshot, PDF, DOCX, or document upload.",
+    "shortDescription": "Template-backed tailored resumes from JDs",
+    "longDescription": "Collects a candidate's education, GPA, internships, projects, awards, skills, and preferences, chooses from bundled Word resume templates and previews, then generates a company- and role-matched resume from any job description text, screenshot, PDF, DOCX, or document upload.",
     "developerName": "Longxia",
     "category": "Productivity",
     "capabilities": ["Write", "Interactive"],

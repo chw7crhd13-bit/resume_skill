@@ -10,6 +10,8 @@ description: Use this skill when the user wants to build, store, update, or tail
 1. 建档：收集并保存用户的基础履历信息。
 2. 定制：用户给出任意 JD（文字、截图、PDF、DOCX、网页内容等）后，马上生成一份匹配岗位和公司风格的简历。
 
+This skill includes a bundled resume template library under `assets/templates/` with many Word templates and preview images across industries. Before comparing the candidate profile against the JD, mention that the skill has multiple templates and will choose one based on the JD, company style, and candidate background.
+
 ## Storage
 
 Use `scripts/profile_store.py` to read and update the profile whenever persistence is needed.
@@ -63,9 +65,10 @@ When a JD arrives:
 
 1. Extract the JD text. For screenshots/images, OCR visually; for PDFs/DOCX, use the available document/PDF tooling if needed.
 2. Identify company, role, industry, seniority, location, required skills, preferred skills, responsibilities, culture signals, and application language.
-3. Read the saved profile. If none exists, collect a minimal profile first.
-4. Map JD requirements to candidate evidence. Prefer direct matches, then adjacent transferable evidence.
-5. Generate the resume immediately unless a missing field would materially change the result.
+3. Choose a template family from the bundled catalog. Read `references/template_catalog.md` when selecting templates.
+4. Read the saved profile. If none exists, collect a minimal profile first.
+5. Map JD requirements to candidate evidence. Prefer direct matches, then adjacent transferable evidence.
+6. Generate the resume immediately unless a missing field would materially change the result.
 
 ## Tailoring Rules
 
@@ -74,6 +77,7 @@ When a JD arrives:
 - Mirror important JD keywords naturally for ATS, but keep claims truthful.
 - Keep one-page resumes dense and scannable; cut weak or unrelated bullets first.
 - Use company-appropriate tone and layout. For detailed style selection, read `references/company_style_playbook.md`.
+- Use the bundled Word template library when the user wants a DOCX/Word-style resume. For template selection, read `references/template_catalog.md`.
 - For schema details and output contracts, read `references/resume_schema.md` when creating or patching saved profile data.
 - For PDF layout decisions, read `references/layout_quality.md` and use the canvas renderer when possible.
 - For stronger visual composition, read `references/poster_layout_patterns.md` and borrow poster-generator ideas such as layers, grids, visual anchors, and template variables without sacrificing ATS readability.
@@ -100,6 +104,8 @@ python3 skills/lobster-resume/scripts/render_resume_pdf.py --input tailored_resu
 5. Repeat until the PDF is visually credible for the target company style.
 
 For DOCX generation, use the relevant document tooling, render-check the final file, and keep the visual style consistent with the selected company category.
+
+For template-based DOCX output, copy the selected bundled template from `assets/templates/` into the output directory, replace placeholder content while preserving styles as much as possible, then render/inspect the final document.
 
 If the user explicitly asks for Canva.com output, treat it as an external design-platform workflow: use Canva only when authentication, a template/design ID, and export permissions are available. Otherwise keep the default local canvas renderer because it is deterministic, ATS-readable, and does not depend on external accounts.
 

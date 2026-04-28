@@ -2,12 +2,14 @@
 
 `lobster-resume` 是一个用于“保存候选人基础履历 + 根据 JD 自动生成定制简历”的 Codex Skill。
 
+它内置多套 Word 简历模板和预览图，覆盖金融、投行、财务会计、软件、咨询、运营、销售、法律、设计、行政、人力资源、外贸、通信电子、通用简洁版等方向。生成简历前，skill 会先根据 JD 的公司类型、岗位方向和候选人背景选择合适模板，再进行内容匹配、改写和排版。
+
 它适合下面这类场景：
 
 - 先让用户填写学校、GPA、实习经历、项目经历、获奖经历、技能等基础信息。
 - 将这些信息保存成本地 profile，后续重复使用。
 - 用户上传 JD 截图、文字、PDF、DOCX 或网页内容后，自动提取岗位要求。
-- 根据公司/岗位风格选择简历表达方式和排版风格。
+- 根据公司/岗位风格选择内置模板、简历表达方式和排版风格。
 - 输出 Markdown 简历，或用 canvas 渲染器生成可投递 PDF。
 
 ## 目录结构
@@ -21,10 +23,17 @@
 │   ├── scripts/
 │   │   ├── profile_store.py
 │   │   └── render_resume_pdf.py
+│   ├── assets/templates/
+│   │   ├── 通用/
+│   │   ├── 财务、金融、会计、出纳/
+│   │   ├── 金融、银行、证券、保险/
+│   │   ├── 软 件/
+│   │   └── ...
 │   └── references/
 │       ├── company_style_playbook.md
 │       ├── layout_quality.md
 │       ├── poster_layout_patterns.md
+│       ├── template_catalog.md
 │       └── resume_schema.md
 └── README.md
 ```
@@ -56,7 +65,19 @@
 
    根据 JD 重排内容优先级，强化相关经历，弱化无关内容，并自然加入 ATS 关键词。
 
-4. **PDF 排版与迭代**
+4. **多模板选择**
+
+   内置模板库包括 28 个类别、100+ Word 模板以及对应预览图。生成前会先选择适合岗位的模板方向，例如：
+
+   - 金融/银行/证券/保险
+   - 财务/会计/出纳/四大
+   - 投行类
+   - 软件/互联网/技术岗
+   - 咨询类
+   - 营销/广告/公关
+   - 通用简洁版
+
+5. **PDF 排版与迭代**
 
    PDF 默认使用本地 canvas 渲染器 `render_resume_pdf.py`，支持：
 
@@ -94,6 +115,27 @@ JD：
 ```
 
 如果 JD 是截图、PDF、DOCX 或网页内容，也可以直接上传，让 Codex 先提取岗位信息。
+
+## 模板库
+
+模板文件已经打包在：
+
+```text
+skills/lobster-resume/assets/templates/
+```
+
+模板索引见：
+
+```text
+skills/lobster-resume/references/template_catalog.md
+```
+
+每个类别通常包含：
+
+- `.docx` 或 `.doc` 原始 Word 模板
+- `预览图/*.png` 模板预览图
+
+使用时，skill 会先根据 JD 判断行业和岗位，再从模板库中选择候选模板；如果候选模板不适合，会退回到通用模板或本地 canvas PDF 模板。
 
 ## 下载与安装
 
