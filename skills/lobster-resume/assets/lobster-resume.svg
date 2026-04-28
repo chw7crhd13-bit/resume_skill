@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Lobster Resume">
+  <rect width="128" height="128" rx="24" fill="#fff7ed"/>
+  <path d="M38 35h52a8 8 0 0 1 8 8v58a8 8 0 0 1-8 8H38a8 8 0 0 1-8-8V43a8 8 0 0 1 8-8Z" fill="#ffffff" stroke="#c2410c" stroke-width="6"/>
+  <path d="M47 55h34M47 70h34M47 85h22" stroke="#7c2d12" stroke-width="6" stroke-linecap="round"/>
+  <path d="M36 29c-7-10-18-7-20 2-2 8 5 15 15 14M92 29c7-10 18-7 20 2 2 8-5 15-15 14" fill="none" stroke="#ea580c" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="52" cy="43" r="3" fill="#7c2d12"/>
+  <circle cx="76" cy="43" r="3" fill="#7c2d12"/>
+</svg>

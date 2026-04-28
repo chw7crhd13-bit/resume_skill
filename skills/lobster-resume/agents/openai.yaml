@@ -1,0 +1,7 @@
+interface:
+  display_name: "Lobster Resume"
+  short_description: "Save profile data and tailor resumes to JDs"
+  icon_large: "./assets/lobster-resume.svg"
+  brand_color: "#C2410C"
+  default_prompt: "Use $lobster-resume to save my background and tailor a resume to this job description."
+

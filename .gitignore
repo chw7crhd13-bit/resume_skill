@@ -1,0 +1,5 @@
+.DS_Store
+.lobster-resume/
+__pycache__/
+*.pyc
+
