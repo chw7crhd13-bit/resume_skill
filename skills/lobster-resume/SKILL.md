@@ -76,6 +76,7 @@ When a JD arrives:
 - Use company-appropriate tone and layout. For detailed style selection, read `references/company_style_playbook.md`.
 - For schema details and output contracts, read `references/resume_schema.md` when creating or patching saved profile data.
 - For PDF layout decisions, read `references/layout_quality.md` and use the canvas renderer when possible.
+- For stronger visual composition, read `references/poster_layout_patterns.md` and borrow poster-generator ideas such as layers, grids, visual anchors, and template variables without sacrificing ATS readability.
 
 ## Output
 

@@ -18,6 +18,8 @@ Use `scripts/render_resume_pdf.py` as the default final PDF path because it uses
 
 Avoid final Markdown-to-PDF output except for quick drafts.
 
+For stronger composition heuristics, also read `poster_layout_patterns.md`.
+
 ## Canva.com Platform Note
 
 Canva.com can be useful when the user explicitly wants a design-platform template, but it is not the default resume renderer.
