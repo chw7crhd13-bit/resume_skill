@@ -148,7 +148,14 @@ skills/lobster-resume/assets/templates/
 skills/lobster-resume/references/template_catalog.md
 ```
 
-完整模板库按需下载。每个类别通常包含：
+完整模板库按需下载。实际使用时推荐“先筛选，再下载”：
+
+1. 先解析 JD，判断行业、岗位、公司风格和内容密度。
+2. 从 `template_catalog.md` 里选出一个最合适的类别。
+3. 只有当最终要使用模板版 DOCX 时，才下载这个类别。
+4. 不建议普通用户一上来下载全部模板。
+
+每个类别通常包含：
 
 - `.docx` 或 `.doc` 原始 Word 模板
 - `预览图/*.png` 模板预览图
@@ -170,6 +177,8 @@ python3 skills/lobster-resume/scripts/download_templates.py --category 通用
 ```bash
 python3 skills/lobster-resume/scripts/download_templates.py --all
 ```
+
+`--all` 只适合维护者或明确想离线保存完整模板库的用户；普通生成流程优先使用 `--category`。
 
 使用时，skill 会先根据 JD 判断行业和岗位，再从模板库中选择候选模板；如果没有下载模板或候选模板不适合，会退回到本地 Word 渲染器或 canvas PDF 模板。
 

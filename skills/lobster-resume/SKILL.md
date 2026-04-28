@@ -33,7 +33,15 @@ python3 skills/lobster-resume/scripts/profile_store.py missing
 
 The full template library is optional so users do not need to download every Word template during installation.
 
-Use the downloader only after the JD/template category is known:
+Use a lazy selection workflow:
+
+1. Parse the JD and candidate profile first.
+2. Select one best-fit template category from `references/template_catalog.md`.
+3. Check whether that category already exists under `assets/templates/`.
+4. Download only that category if, and only if, the final output will use a template-backed DOCX.
+5. Do not download `--all` during normal resume generation.
+
+Downloader commands:
 
 ```bash
 python3 skills/lobster-resume/scripts/download_templates.py --list
@@ -41,7 +49,7 @@ python3 skills/lobster-resume/scripts/download_templates.py --category 通用
 python3 skills/lobster-resume/scripts/download_templates.py --all
 ```
 
-- Prefer `--category <name>` over `--all`.
+- Prefer `--category <name>` over `--all`; `--all` is only for maintainers or users who explicitly ask for the full library.
 - If templates are unavailable or network download fails, continue with `scripts/render_resume_docx.py`.
 - Downloaded templates are local cache files and should not be committed.
 
@@ -81,7 +89,7 @@ When a JD arrives:
 
 1. Extract the JD text. For screenshots/images, OCR visually; for PDFs/DOCX, use the available document/PDF tooling if needed.
 2. Identify company, role, industry, seniority, location, required skills, preferred skills, responsibilities, culture signals, and application language.
-3. Choose a template family from the template catalog. Read `references/template_catalog.md` when selecting templates. Download that category on demand only if a concrete Word template is needed.
+3. Choose a template family from the template catalog. Read `references/template_catalog.md` when selecting templates. Do not download templates yet unless the final output path needs a concrete Word template.
 4. Read the saved profile. If none exists, collect a minimal profile first.
 5. Before generating, ask whether the user wants a JD-driven brainstorming round. Explain that this can uncover hidden experiences, adjacent skills, coursework, tools, or small projects that make the resume more targeted.
 6. If the user agrees, follow `references/brainstorming_guide.md`: ask focused questions, collect answers, merge useful evidence into the profile, and then generate.
@@ -111,7 +119,7 @@ Default output is an editable Word document (`.docx`) plus a short Markdown note
 - Missing facts that would improve the next version.
 - Interview advice based on the final resume/JD fit: likely questions, weak spots to prepare, and suggested stories.
 
-For DOCX generation, default to the local Word renderer unless a bundled template is clearly better.
+For DOCX generation, default to the local Word renderer unless a template-backed layout is clearly better for the JD/company style.
 
 1. Convert the tailored resume into the JSON contract expected by `scripts/render_resume_docx.py`.
 2. Generate an editable DOCX:
@@ -121,7 +129,7 @@ python3 skills/lobster-resume/scripts/render_resume_docx.py --input tailored_res
 ```
 
 3. When possible, render-check the DOCX using the available document tooling before delivery.
-4. If using an optional Word template, first ensure the selected category exists under `assets/templates/`; if not, run `scripts/download_templates.py --category <category>`. Then copy the selected template into the output directory and replace placeholder content while preserving styles.
+4. If using an optional Word template, first ensure the selected category exists under `assets/templates/`; if not, run `scripts/download_templates.py --category <category>`. Download only the selected category, then copy the chosen template into the output directory and replace placeholder content while preserving styles.
 
 For PDF generation, use the local canvas renderer. Do not use Markdown-to-PDF as the final output path unless the user only wants a rough draft.
 

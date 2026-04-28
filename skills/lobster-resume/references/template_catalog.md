@@ -54,7 +54,7 @@ Choose template categories before rewriting bullets.
 5. If the JD is creative or brand-facing, choose a more visual template but keep text readable.
 6. If no category fits, use `通用`.
 
-Download the selected category only when needed:
+Lazy-download the selected category only when needed. In the normal flow, do not download all templates before the JD is parsed:
 
 ```bash
 python3 skills/lobster-resume/scripts/download_templates.py --category 通用
