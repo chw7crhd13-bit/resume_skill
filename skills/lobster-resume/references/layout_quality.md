@@ -8,13 +8,28 @@ Resume generation is iterative. A good resume is not only tailored text; it is r
 
 ## PDF Renderer Preference
 
-Prefer `scripts/render_resume_pdf.py` for PDF output because it uses ReportLab canvas-level control:
+Use `scripts/render_resume_pdf.py` as the default final PDF path because it uses ReportLab canvas-level control:
 
 - trial layout before final rendering
 - dynamic font scale and line height
 - sidebar + main-content templates
 - optional photo
 - text remains extractable for ATS
+
+Avoid final Markdown-to-PDF output except for quick drafts.
+
+## Canva.com Platform Note
+
+Canva.com can be useful when the user explicitly wants a design-platform template, but it is not the default resume renderer.
+
+Use Canva only when all are true:
+
+- The user asks for Canva/Canva.com specifically.
+- Authentication and API/app permissions are available.
+- A target Canva design/template is available or the user accepts creating one.
+- The final export can still be reviewed for ATS readability and layout quality.
+
+If those conditions are not met, use the local canvas renderer and iterate visually.
 
 ## Visual QA Checklist
 
@@ -52,4 +67,3 @@ When content is too sparse:
 - Tech, AI, product, data: clean two-column with keywords and tools visible.
 - Creative, brand, media: warmer accents are acceptable, but keep ATS readability.
 - Research/quant: project and methodology hierarchy matters more than decoration.
-

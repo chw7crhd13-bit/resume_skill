@@ -85,7 +85,7 @@ Default output is Markdown unless the user requests DOCX/PDF. Include:
 - Short tailoring note listing the JD keywords emphasized.
 - Missing facts that would improve the next version.
 
-For PDF generation:
+For PDF generation, default to the local canvas renderer. Do not use Markdown-to-PDF as the final output path unless the user only wants a rough draft.
 
 1. Convert the tailored resume into the JSON contract expected by `scripts/render_resume_pdf.py`.
 2. Generate a PDF with the canvas renderer:
@@ -99,6 +99,8 @@ python3 skills/lobster-resume/scripts/render_resume_pdf.py --input tailored_resu
 5. Repeat until the PDF is visually credible for the target company style.
 
 For DOCX generation, use the relevant document tooling, render-check the final file, and keep the visual style consistent with the selected company category.
+
+If the user explicitly asks for Canva.com output, treat it as an external design-platform workflow: use Canva only when authentication, a template/design ID, and export permissions are available. Otherwise keep the default local canvas renderer because it is deterministic, ATS-readable, and does not depend on external accounts.
 
 ## Iterative Debugging
 
